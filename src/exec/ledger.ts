@@ -1,11 +1,13 @@
+import { appendFileSync, mkdirSync } from 'node:fs';
+import path from 'node:path';
 import type { LedgerEntry } from '../types.js';
 
-export function appendLedgerEntry(entry: LedgerEntry): void {
-  if (process.env.NODE_ENV === 'test') {
-    return;
-  }
+export function appendLedgerEntry(entry: LedgerEntry): string {
+  const ledgerDir = path.resolve(process.cwd(), 'ledger');
+  const filePath = path.join(ledgerDir, 'trades.jsonl');
 
-  // Real implementation would append to ledger/*.jsonl in a GitHub-backed append-only flow.
-  // This stub ensures the code path is present and intentional.
-  void entry;
+  mkdirSync(ledgerDir, { recursive: true });
+  appendFileSync(filePath, `${JSON.stringify(entry)}\n`, 'utf8');
+
+  return filePath;
 }

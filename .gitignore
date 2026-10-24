@@ -1,40 +1,6 @@
-# FX Flipper
-
-A safety-first MiniPay + Celo agent rails prototype built for a public repo, free-tier execution, and dry-run-first operation.
-
-## Mission
-
-This project implements the architecture in `PLAN.md` for a bounded FX-flipping strategy on Celo, with:
-- deterministic execution flow
-- GitHub-backed append-only ledger
-- explicit policy limits
-- safe dry-run mode by default
-- optional later MiniPay/x402 integration
-
-## Safety model
-
-- The money-moving path is deterministic: G → H → I.
-- LLM roles never hold keys.
-- The `I` executor must enforce `config/limits.json` regardless of upstream LLM output.
-- Any live trade requires explicit opt-in and a separate commit.
-
-## Quick start
-
-```bash
-npm install
-cp .env.example .env
-npm run build
-npm test
-```
-
-## Repository conventions
-
-- `PLAN.md` is the canonical project plan.
-- `DECISIONS.md` keeps one-line decisions with date and reasoning.
-- `STATUS.md` tracks current done / next / blockers state.
-- `config/limits.json` is the authority for safety controls.
-- `ledger/*.jsonl` is append-only and auditable.
-
-## Current phase
-
-This repo is in early Milestone 0 scaffolding. The project is intentionally dry-run and test-friendly before on-chain value verification.
+node_modules/
+dist/
+.env
+.env.*
+coverage/
+.DS_Store
