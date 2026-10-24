@@ -1,0 +1,14 @@
+{
+  "maxSingleTradeBps": 1000,
+  "maxDailyTrades": 6,
+  "maxDailyNotionalUsd": 250,
+  "maxExposureUsd": 1000,
+  "minTimeBetweenTradesMs": 300000,
+  "maxSlippageBps": 500,
+  "stalePriceMs": 45000,
+  "minimumGasReserveUsd": 5,
+  "defaultDryRun": true,
+  "liveModeRequiresFlag": true,
+  "orderExpiryMinutes": 15,
+  "sourceCheckToleranceBps": 200
+}

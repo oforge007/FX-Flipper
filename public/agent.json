@@ -1,0 +1,14 @@
+{
+  "name": "fx-flipper-agent-card",
+  "description": "A safety-first MiniPay + Celo agent rails prototype for bounded FX automation.",
+  "version": "0.1.0",
+  "supports": [
+    "Celo",
+    "MiniPay",
+    "x402",
+    "dry-run",
+    "agent-rails"
+  ],
+  "owner": "Oforge007",
+  "contact": "https://github.com/Oforge007/FX-Flipper"
+}

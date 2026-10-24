@@ -1,0 +1,21 @@
+{
+  "tokens": {
+    "CELO": "0x0000000000000000000000000000000000000000",
+    "USDT": "0x0000000000000000000000000000000000000000",
+    "cNGN": "0x0000000000000000000000000000000000000000",
+    "USAT": "0x0000000000000000000000000000000000000000"
+  },
+  "dex": {
+    "router": "0x0000000000000000000000000000000000000000",
+    "pool": "0x0000000000000000000000000000000000000000"
+  },
+  "erc8004": {
+    "registry": "0x0000000000000000000000000000000000000000",
+    "source": "https://docs.minipay.xyz/getting-started/"
+  },
+  "x402": {
+    "facilitator": "0x0000000000000000000000000000000000000000",
+    "source": "https://docs.minipay.xyz/getting-started/"
+  },
+  "notes": "Replace placeholder addresses with verified values from Celopedia or official docs before any live execution."
+}

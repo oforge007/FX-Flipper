@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {
+      "id": "manual-fallback",
+      "type": "manual",
+      "asset": "CELO/USDT",
+      "priority": 0,
+      "description": "Local price fallback used during outages or tests."
+    }
+  ]
+}
