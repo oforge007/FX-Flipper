@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FX Flipper Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Celo Agent Rails</p>
+          <h1>FX Flipper</h1>
+        </div>
+        <div class="status-pill operating">Dry-run operating</div>
+      </header>
+
+      <main class="grid">
+        <section class="card hero">
+          <div>
+            <p class="label">Market</p>
+            <h2>CELO / USDT</h2>
+          </div>
+          <div class="price-wrap">
+            <div class="value">$1.000</div>
+            <div class="delta up">+0.12%</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <p class="label">Session-key policy</p>
+          <ul>
+            <li>Whitelist: router + token pair</li>
+            <li>Max slippage: 300 bps</li>
+            <li>Deadline: 15 min</li>
+            <li>Gas: feeCurrency policy enforced</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <p class="label">Execution state</p>
+          <div class="metric-row">
+            <span>Order</span>
+            <strong>intent-001</strong>
+          </div>
+          <div class="metric-row">
+            <span>Status</span>
+            <strong>dry-run accepted</strong>
+          </div>
+          <div class="metric-row">
+            <span>Ledger</span>
+            <strong>trades.jsonl</strong>
+          </div>
+        </section>
+
+        <section class="card wide">
+          <p class="label">Policy guardrails</p>
+          <div class="results-grid">
+            <div>
+              <small>Max amount</small>
+              <strong>100,000</strong>
+            </div>
+            <div>
+              <small>Max slippage</small>
+              <strong>3.00%</strong>
+            </div>
+            <div>
+              <small>Deadline</small>
+              <strong>15 min</strong>
+            </div>
+            <div>
+              <small>Mode</small>
+              <strong>Dry-run</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="card wide">
+          <p class="label">Recent ledger events</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Event</th>
+                <th>Outcome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>12:04 UTC</td>
+                <td>route-policy-check</td>
+                <td>passed</td>
+              </tr>
+              <tr>
+                <td>12:05 UTC</td>
+                <td>price-tolerance-check</td>
+                <td>passed</td>
+              </tr>
+              <tr>
+                <td>12:06 UTC</td>
+                <td>aa-intent-accepted</td>
+                <td>dry-run</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

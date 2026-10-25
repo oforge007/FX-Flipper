@@ -8,6 +8,7 @@
     "test": "npm run build && node --test dist/tests/**/*.test.js",
     "start": "node dist/src/index.js",
     "m1:dryrun": "npm run build && node dist/src/index.js",
+    "ui": "python3 -m http.server 8000",
     "lint": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
