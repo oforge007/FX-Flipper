@@ -39,7 +39,7 @@ export function validatePriceSources(
   }
 
   const spreadRatio = Math.abs(primary.price - secondary.price) / Math.max(primary.price, secondary.price);
-  const toleranceRatio = toleranceBps / 10000;
+  const toleranceRatio = toleranceBps / 10_000;
 
   return spreadRatio <= toleranceRatio;
 }
