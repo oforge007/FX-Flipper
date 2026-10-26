@@ -1,13 +1,14 @@
 {
   "name": "fx-flipper",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
+  "description": "Shadow-first cNGN/USDT paired-cycle agent scaffold for Celo and Textile FX",
   "scripts": {
     "build": "tsc --project tsconfig.json",
-    "test": "npm run build && node --test dist/tests/**/*.test.js",
-    "start": "node dist/src/index.js",
-    "m1:dryrun": "npm run build && node dist/src/index.js",
+    "test": "npm run build && node --test dist/tests/*.test.js",
+    "start": "npm run build && node dist/src/index.js",
+    "m1:dryrun": "npm run start",
     "ui": "python3 -m http.server 8000",
     "lint": "tsc --noEmit --project tsconfig.json"
   },

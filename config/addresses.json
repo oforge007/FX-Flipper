@@ -1,21 +1,15 @@
 {
+  "chainId": 42220,
   "tokens": {
-    "CELO": "0x0000000000000000000000000000000000000000",
-    "USDT": "0x0000000000000000000000000000000000000000",
-    "cNGN": "0x0000000000000000000000000000000000000000",
-    "USAT": "0x0000000000000000000000000000000000000000"
+    "USDT": "0x48065fbbe25f71c9282ddf5e1cd6d6a887483d5e",
+    "cNGN": "REPLACE_WITH_VERIFIED_CNGN_ADDRESS"
   },
-  "dex": {
-    "router": "0x0000000000000000000000000000000000000000",
-    "pool": "0x0000000000000000000000000000000000000000"
+  "feeCurrency": {
+    "USDTAdapter": "0x0e2a3e05bc9a16f5292a6170456a710cb89c6f72",
+    "note": "Use the adapter address in Celo transaction feeCurrency, not the USDT token address. Verify against current Celo FeeCurrencyDirectory before use."
   },
-  "erc8004": {
-    "registry": "0x0000000000000000000000000000000000000000",
-    "source": "https://docs.minipay.xyz/getting-started/"
-  },
-  "x402": {
-    "facilitator": "0x0000000000000000000000000000000000000000",
-    "source": "https://docs.minipay.xyz/getting-started/"
-  },
-  "notes": "Replace placeholder addresses with verified values from Celopedia or official docs before any live execution."
+  "textile": {
+    "reactor": "REPLACE_WITH_VERIFIED_TEXTILE_CELO_REACTOR",
+    "note": "Do not execute while any REPLACE_WITH value remains."
+  }
 }

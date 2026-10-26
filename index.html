@@ -1,113 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FX Flipper Dashboard</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="shell">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">Celo Agent Rails</p>
-          <h1>FX Flipper</h1>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FX Flipper — Round-trip Lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div><p class="eyebrow">Celo · Textile FX · Shadow-first</p><h1>FX Flipper</h1><p class="sub">Round-trip economics lab</p></div>
+      <div class="status-pill">SHADOW MODE · LIVE EXECUTION OFF</div>
+    </header>
+
+    <section class="notice"><strong>Not connected to live quotes or a wallet.</strong> Values below are assumptions for sensitivity analysis, not current gas estimates or executable Textile quotes.</section>
+
+    <main class="layout">
+      <section class="card">
+        <div class="section-head"><div><p class="label">Strategy inputs</p><h2>Round-trip assumptions</h2></div><span class="chip">cNGN / USDT</span></div>
+        <div class="form-grid">
+          <label>Entry spend (USDT)<input id="entry" type="number" min="1" step="1" value="100"></label>
+          <label>Expected exit proceeds (USDT)<input id="exit" type="number" min="0" step="0.01" value="100.50"></label>
+          <label>Entry gas estimate (USDT)<input id="gasEntry" type="number" min="0" step="0.001" value="0.03"></label>
+          <label>Exit gas estimate (USDT)<input id="gasExit" type="number" min="0" step="0.001" value="0.03"></label>
+          <label>Other unpriced costs (USDT)<input id="other" type="number" min="0" step="0.001" value="0"></label>
+          <label>Execution haircut (bps, round trip)<input id="haircut" type="number" min="0" max="10000" step="1" value="5"></label>
+          <label>Minimum net profit (USDT)<input id="minProfit" type="number" min="0" step="0.01" value="0.10"></label>
+          <label>Minimum net margin (bps)<input id="minMargin" type="number" min="0" step="1" value="10"></label>
+          <label>Minimum trade (USDT)<input id="minTrade" type="number" min="0" step="1" value="25"></label>
+          <label>Maximum trade (USDT)<input id="maxTrade" type="number" min="0" step="1" value="250"></label>
+          <label>Smart account USDT balance<input id="balance" type="number" min="0" step="1" value="150"></label>
+          <label>Protected gas reserve (USDT)<input id="reserve" type="number" min="0" step="0.01" value="1"></label>
         </div>
-        <div class="status-pill operating">Dry-run operating</div>
-      </header>
+        <div class="actions"><button id="calculate">Recalculate economics</button><button id="reset" class="secondary">Reset example</button></div>
+      </section>
 
-      <main class="grid">
-        <section class="card hero">
-          <div>
-            <p class="label">Market</p>
-            <h2>CELO / USDT</h2>
-          </div>
-          <div class="price-wrap">
-            <div class="value">$1.000</div>
-            <div class="delta up">+0.12%</div>
-          </div>
-        </section>
+      <section class="card">
+        <p class="label">Decision preview</p><h2 id="decisionTitle">Calculating…</h2>
+        <p id="decisionText" class="muted">A candidate is eligible only when every configured floor is met.</p>
+        <div class="kpis">
+          <div class="kpi"><span>Expected net P&amp;L</span><strong id="net">—</strong></div>
+          <div class="kpi"><span>Net margin</span><strong id="margin">—</strong></div>
+          <div class="kpi"><span>Break-even exit</span><strong id="breakeven">—</strong></div>
+          <div class="kpi"><span>Exit needed for target</span><strong id="targetExit">—</strong></div>
+        </div>
+        <div class="cost-breakdown">
+          <div><span>Gross P&amp;L</span><strong id="gross">—</strong></div>
+          <div><span>Gas (both legs)</span><strong id="gasTotal">—</strong></div>
+          <div><span>Execution haircut</span><strong id="haircutCost">—</strong></div>
+          <div><span>Reserve after entry</span><strong id="remaining">—</strong></div>
+        </div>
+        <div id="reasons" class="reasons"></div>
+      </section>
 
-        <section class="card">
-          <p class="label">Session-key policy</p>
-          <ul>
-            <li>Whitelist: router + token pair</li>
-            <li>Max slippage: 300 bps</li>
-            <li>Deadline: 15 min</li>
-            <li>Gas: feeCurrency policy enforced</li>
-          </ul>
-        </section>
+      <section class="card wide">
+        <div class="section-head"><div><p class="label">Inventory architecture</p><h2>Who holds the USDT?</h2></div></div>
+        <div class="architecture">
+          <div><b>Owner / recovery wallet</b><p>Owns control and can revoke permissions. Do not expose its private key to the agent.</p></div>
+          <div class="arrow">authorizes ↓</div>
+          <div class="primary-node"><b>Smart account — inventory owner</b><p>Holds USDT and cNGN. Textile quote taker should be this address; proceeds return here.</p></div>
+          <div class="arrow">restricted permission ↓</div>
+          <div><b>Session key + backend policy</b><p>Can request/submit only allowed paired swaps under size, quote expiry, reserve, slippage and cycle rules. Session key does not own the funds.</p></div>
+        </div>
+        <p class="small-note">If USDT is held in a different EOA, it is not automatically spendable by the smart account. Transfer/funding must be explicit. USDT fee abstraction on Celo uses the adapter address in <code>feeCurrency</code>; the smart-account/bundler path must be verified.</p>
+      </section>
 
-        <section class="card">
-          <p class="label">Execution state</p>
-          <div class="metric-row">
-            <span>Order</span>
-            <strong>intent-001</strong>
-          </div>
-          <div class="metric-row">
-            <span>Status</span>
-            <strong>dry-run accepted</strong>
-          </div>
-          <div class="metric-row">
-            <span>Ledger</span>
-            <strong>trades.jsonl</strong>
-          </div>
-        </section>
-
-        <section class="card wide">
-          <p class="label">Policy guardrails</p>
-          <div class="results-grid">
-            <div>
-              <small>Max amount</small>
-              <strong>100,000</strong>
-            </div>
-            <div>
-              <small>Max slippage</small>
-              <strong>3.00%</strong>
-            </div>
-            <div>
-              <small>Deadline</small>
-              <strong>15 min</strong>
-            </div>
-            <div>
-              <small>Mode</small>
-              <strong>Dry-run</strong>
-            </div>
-          </div>
-        </section>
-
-        <section class="card wide">
-          <p class="label">Recent ledger events</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Event</th>
-                <th>Outcome</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>12:04 UTC</td>
-                <td>route-policy-check</td>
-                <td>passed</td>
-              </tr>
-              <tr>
-                <td>12:05 UTC</td>
-                <td>price-tolerance-check</td>
-                <td>passed</td>
-              </tr>
-              <tr>
-                <td>12:06 UTC</td>
-                <td>aa-intent-accepted</td>
-                <td>dry-run</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </main>
-    </div>
-
-    <script src="app.js"></script>
-  </body>
+      <section class="card wide">
+        <p class="label">Live readiness</p><h2>What this prototype deliberately does not do</h2>
+        <ul class="checklist">
+          <li>Fetch a real Textile FX firm quote</li><li>Estimate gas from exact swap calldata</li><li>Sign approvals or transactions</li><li>Submit a UserOperation or execute a swap</li><li>Enable a live trading loop</li>
+        </ul>
+        <p class="muted">Next step: connect a quote adapter and chain gas estimator, then run shadow mode for several days and compare predicted versus realized costs. The interface is a calculator, not an execution terminal.</p>
+      </section>
+    </main>
+    <footer>FX Flipper · Paired-cycle safety before trade frequency</footer>
+  </div>
+  <script src="app.js"></script>
+</body>
 </html>

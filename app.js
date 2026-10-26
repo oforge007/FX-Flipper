@@ -1,12 +1,50 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const priceValue = document.querySelector('.value');
-  const delta = document.querySelector('.delta');
-
-  if (priceValue) {
-    priceValue.textContent = '$1.000';
+(() => {
+  const ids = ["entry","exit","gasEntry","gasExit","other","haircut","minProfit","minMargin","minTrade","maxTrade","balance","reserve"];
+  const get = id => Number(document.getElementById(id).value);
+  const money = n => Number.isFinite(n) ? `${n < 0 ? "-$" : "$"}${Math.abs(n).toFixed(4)}` : "—";
+  const bps = n => Number.isFinite(n) ? `${n.toFixed(2)} bps` : "—";
+  function calculate() {
+    const entry=get("entry"), exit=get("exit"), gasEntry=get("gasEntry"), gasExit=get("gasExit");
+    const other=get("other"), haircutBps=get("haircut"), minProfit=get("minProfit");
+    const minMargin=get("minMargin"), minTrade=get("minTrade"), maxTrade=get("maxTrade");
+    const balance=get("balance"), reserve=get("reserve");
+    const nums=[entry,exit,gasEntry,gasExit,other,haircutBps,minProfit,minMargin,minTrade,maxTrade,balance,reserve];
+    const valid=nums.every(Number.isFinite)&&nums.every(n=>n>=0)&&haircutBps<10000;
+    const gross=exit-entry, haircut=exit*haircutBps/10000;
+    const net=gross-gasEntry-gasExit-other-haircut;
+    const margin=entry>0?net/entry*10000:NaN;
+    const breakEven=entry+gasEntry+gasExit+other;
+    const targetExit=(entry+gasEntry+gasExit+other+minProfit)/(1-haircutBps/10000);
+    const reasons=[];
+    if(!valid)reasons.push("Invalid or negative input.");
+    if(entry<=0)reasons.push("Entry spend must be positive.");
+    if(entry<minTrade)reasons.push("Below minimum trade size.");
+    if(entry>maxTrade)reasons.push("Above maximum trade size.");
+    if(entry+reserve>balance)reasons.push("Insufficient USDT after preserving the gas reserve.");
+    if(net<minProfit)reasons.push("Expected net profit is below the configured floor.");
+    if(margin<minMargin)reasons.push("Expected net margin is below the configured floor.");
+    document.getElementById("net").textContent=money(net);
+    document.getElementById("net").style.color=net>=minProfit?"var(--cyan)":"var(--red)";
+    document.getElementById("margin").textContent=bps(margin);
+    document.getElementById("breakeven").textContent=money(breakEven);
+    document.getElementById("targetExit").textContent=money(targetExit);
+    document.getElementById("gross").textContent=money(gross);
+    document.getElementById("gasTotal").textContent=money(gasEntry+gasExit);
+    document.getElementById("haircutCost").textContent=money(haircut);
+    document.getElementById("remaining").textContent=money(balance-entry);
+    const eligible=valid&&reasons.length===0;
+    document.getElementById("decisionTitle").textContent=eligible?"Economically eligible (hypothetical)":"Skip this candidate";
+    document.getElementById("decisionText").textContent=eligible?"Assumptions clear the local thresholds. This does not authorize execution or confirm a live quote.":"One or more economics or inventory checks fail. Fix the assumptions or skip the trade.";
+    const box=document.getElementById("reasons");
+    box.className="reasons "+(eligible?"good":"bad");
+    box.innerHTML=eligible?"No local policy rejections. Live quote, chain gas estimate, account checks and server-side policy are still required.":"<b>Reasons</b><ul>"+(reasons.length?reasons:["Candidate is not eligible."]).map(x=>`<li>${x}</li>`).join("")+"</ul>";
   }
-
-  if (delta) {
-    delta.textContent = '+0.12%';
-  }
-});
+  document.getElementById("calculate").addEventListener("click",calculate);
+  ids.forEach(id=>document.getElementById(id).addEventListener("input",calculate));
+  document.getElementById("reset").addEventListener("click",()=>{
+    const values={entry:100,exit:100.50,gasEntry:0.03,gasExit:0.03,other:0,haircut:5,minProfit:0.10,minMargin:10,minTrade:25,maxTrade:250,balance:150,reserve:1};
+    Object.entries(values).forEach(([id,value])=>document.getElementById(id).value=String(value));
+    calculate();
+  });
+  calculate();
+})();

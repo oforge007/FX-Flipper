@@ -1,3 +1,0 @@
-- Done: deterministic M1 execution core and dry-run ledger are in place.
-- Next: extend the AA policy scaffold with explicit intent validation and secure session-key guardrails, then keep it dry-run only.
-- Blockers: none; real mainnet addresses remain intentionally unverified and will be sourced only from Celopedia/official docs before any live use.
